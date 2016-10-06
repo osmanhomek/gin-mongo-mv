@@ -4,12 +4,35 @@ import (
 	mgo "gopkg.in/mgo.v2"
 
 	//"github.com/fvbock/endless"
-	"api.gunde5dk.com/controllers"
+	"gin-mongo-mv/controllers"
+	"gin-mongo-mv/config"
 	"github.com/gin-gonic/gin"
 )
 
 func getSession() *mgo.Session {
-	s, err := mgo.Dial("mongodb://usr_gunde_5dk:Rrd3b7yk28rbAwZb@ds035036.mlab.com:35036/gunde5dkcom")
+
+
+	c := config.NewCfg("config.ini")
+	if err := c.Load() ; err != nil {
+        panic(err)
+    }
+
+	mongodb_host, err := c.ReadString("mongodb_host", "")
+    if err != nil {panic(err)}
+
+	mongodb_port, err := c.ReadString("mongodb_port", "")
+    if err != nil {panic(err)}   
+
+	mongodb_dbname, err := c.ReadString("mongodb_dbname", "")
+    if err != nil {panic(err)} 
+
+	mongodb_username, err := c.ReadString("mongodb_username", "")
+    if err != nil {panic(err)}    
+
+	mongodb_password, err := c.ReadString("mongodb_password", "")
+    if err != nil {panic(err)}     
+            
+	s, err := mgo.Dial("mongodb://"+mongodb_username+":"+mongodb_password+"@"+mongodb_host+":"+mongodb_port+"/"+mongodb_dbname)
 	if err != nil {
 		panic(err)
 	}
@@ -17,10 +40,8 @@ func getSession() *mgo.Session {
 }
 func main() {
 	// Creates a gin router with default middleware:
-	// logger and recovery (crash-free) middleware
 	router := gin.Default()
 
-	//uc := controllers.NewSectionController(getSession())
 	uc := controllers.NewSectionController(getSession())
 
 	router.GET("/someGet", uc.GetSections)
