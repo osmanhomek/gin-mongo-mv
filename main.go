@@ -12,7 +12,6 @@ import (
 
 func getSession() *mgo.Session {
 
-
 	c := config.NewCfg("config.ini")
 	if err := c.Load() ; err != nil {
         panic(err)
@@ -42,11 +41,11 @@ func getSession() *mgo.Session {
 	return s
 }
 func main() {
-	// Creates a gin router with default middleware:
+	// Creates a gin router with default middleware:	
+	session := getSession()
+	uc := controllers.NewSectionController(session)
+
 	router := gin.Default()
-
-	uc := controllers.NewSectionController(getSession())
-
 	router.GET("/someGet", uc.GetSections)
 
 	//endless.ListenAndServe(":4242", router)
