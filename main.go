@@ -6,6 +6,7 @@ import (
 	//"github.com/fvbock/endless"
 	"gin-mongo-mv/controllers"
 	"gin-mongo-mv/config"
+	"fmt"
 	"github.com/gin-gonic/gin"
 )
 
@@ -31,9 +32,11 @@ func getSession() *mgo.Session {
 
 	mongodb_password, err := c.ReadString("mongodb_password", "")
     if err != nil {panic(err)}     
-            
-	s, err := mgo.Dial("mongodb://"+mongodb_username+":"+mongodb_password+"@"+mongodb_host+":"+mongodb_port+"/"+mongodb_dbname)
+    
+    dbcnnstr := "mongodb://"+mongodb_username+":"+mongodb_password+"@"+mongodb_host+":"+mongodb_port+"/"+mongodb_dbname        
+	s, err := mgo.Dial(dbcnnstr)
 	if err != nil {
+		fmt.Println(dbcnnstr)
 		panic(err)
 	}
 	return s
