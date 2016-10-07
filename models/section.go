@@ -2,6 +2,7 @@ package models
 
 import "gopkg.in/mgo.v2/bson"
 
+/*
 type (
 	// Section represents the structure of our resource
 	Section struct {
@@ -12,3 +13,12 @@ type (
 		avatar     string        `bson:"avatar"`
 	}
 )
+*/
+type Section struct {
+    ID			bson.ObjectId `bson:"_id,omitempty"`
+    orderIndex	int
+    engname		string
+    trname		string
+    avatar		string
+}
+
